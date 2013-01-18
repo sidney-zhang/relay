@@ -1,0 +1,148 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.exttech</groupId>
+    <artifactId>box-server</artifactId>
+    <packaging>war</packaging>
+    <version>1.0</version>
+    <name>BoxServer</name>
+    <url>http://www.exttech.com</url>
+
+    <properties>
+        <sl4j.version>1.5.6</sl4j.version>
+		<jetty.version>8.1.0.RC5</jetty.version>
+		<com.exttech.version>1.0</com.exttech.version>
+		<cglib.version>2.2.2</cglib.version>
+		<servlet-api.version>2.5</servlet-api.version>
+    </properties>
+
+    <build>
+        <finalName>boxserver</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+					<encoding>utf-8</encoding>
+                </configuration>
+            </plugin>
+            <!-- Jetty configuration -->
+			<plugin>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>${jetty.version}</version>
+				<configuration>
+					<webAppConfig>
+						<contextPath>/</contextPath>
+					</webAppConfig>
+					<connectors>
+						<connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
+							<port>8081</port>
+							<maxIdleTime>60000</maxIdleTime>
+						</connector>
+					</connectors>
+				</configuration>
+			</plugin>
+            <!-- Configuration which allows JUnit tests to be placed in the same folder as java files 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <testSourceDirectory>${basedir}/src/main/java/</testSourceDirectory>
+                    <testClassesDirectory>${project.build.directory}/classes/</testClassesDirectory>
+                </configuration>
+            </plugin>
+            -->
+        </plugins>
+        <!-- Configuration which allows configuration files (such as xml files) to be placed in the same folder as java files -->
+        <resources>
+            <resource>
+                <directory>${basedir}/src/main/resources/</directory>
+            </resource>
+        </resources>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.exttech</groupId>
+            <artifactId>hibernate-deps</artifactId>
+            <version>${com.exttech.version}</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>com.exttech</groupId>
+            <artifactId>spring-deps</artifactId>
+            <version>${com.exttech.version}</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>com.exttech</groupId>
+            <artifactId>test-deps</artifactId>
+            <version>${com.exttech.version}</version>
+            <type>pom</type>
+        </dependency>
+
+        <!-- **********************************************************************
+       ** OTHER DEPENDENCIES **
+       ********************************************************************** -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jcl</artifactId>
+            <version>${sl4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${sl4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>1.8.0.10</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.transaction</groupId>
+            <artifactId>jta</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.14</version>
+        </dependency>
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>${cglib.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+        	<groupId>javax.servlet</groupId>
+        	<artifactId>servlet-api</artifactId>
+        	<version>${servlet-api.version}</version>
+        </dependency>
+        <dependency>
+        	<groupId>org.codehaus.jackson</groupId>
+        	<artifactId>jackson-core-asl</artifactId>
+        	<version>1.9.9</version>
+        </dependency>
+        <dependency>
+        	<groupId>org.codehaus.jackson</groupId>
+        	<artifactId>jackson-mapper-asl</artifactId>
+        	<version>1.9.9</version>
+        </dependency>
+        <dependency>
+        	<groupId>commons-fileupload</groupId>
+        	<artifactId>commons-fileupload</artifactId>
+        	<version>1.2.2</version>
+        </dependency>
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-all</artifactId>
+			<version>5.5.0</version>
+		</dependency>
+    </dependencies>
+</project>
