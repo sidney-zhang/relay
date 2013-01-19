@@ -13,39 +13,44 @@ public class SingleThreadDownloader extends Thread {
     private InputStream in;
 
     private URL url;
-    private long block;
     private int threadNo;
     private RandomAccessFile out;
-    private int blockSize;
+    private final long start;
+    private final long end;
 
 
-    public SingleThreadDownloader(URL url, long block, int blockSize, int threadCount, RandomAccessFile out) {
+    public SingleThreadDownloader(URL url, long start, long end, int threadCount, RandomAccessFile out) {
         this.url = url;
-        this.block = block;
-        this.blockSize = blockSize;
         this.threadNo = threadCount;
         this.out = out;
+        this.start = start;
+        this.end = end;
     }
 
     @Override
     public void run() {
+        HttpURLConnection connection = null;
         try {
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestProperty("Range", "bytes=" + block * (threadNo - 1));
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestProperty("Range", "bytes=" + start + "-" + end);
             in = connection.getInputStream();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        byte[] buffer = new byte[blockSize];
+        int total = (int) (end - start + 1);
+        byte[] buffer = new byte[total];
         int offset = 0;
-        int receivedSize = 0;
+        long curPos = start;
         try {
-            while ((offset = in.read(buffer)) != -1 && receivedSize <= block) {
+            while (curPos <= end) {
+                offset = in.read(buffer);
+                if (offset == -1) {
+                    break;
+                }
                 out.write(buffer, 0, offset);
-                receivedSize += offset;
-
+                curPos += offset;
+//                System.out.println("total:" + total + ",start:" + start + ",end:" + end + ",offset==" + offset + ", curPos:" + curPos);
             }
             done = Boolean.TRUE;
         } catch (IOException e) {
@@ -55,8 +60,7 @@ public class SingleThreadDownloader extends Thread {
                 try {
                     out.close();
                 } catch (IOException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    e.printStackTrace();
                 }
                 out = null;
             }
@@ -68,7 +72,11 @@ public class SingleThreadDownloader extends Thread {
                 }
                 in = null;
             }
+            if (connection != null) {
+                connection.disconnect();
+            }
         }
+        System.out.println(threadNo + " finished.");
     }
 
     public boolean isDone() {
