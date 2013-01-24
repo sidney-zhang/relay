@@ -35,7 +35,7 @@
 				<version>${jetty.version}</version>
 				<configuration>
 					<webAppConfig>
-						<contextPath>/</contextPath>
+						<contextPath>/box</contextPath>
 					</webAppConfig>
 					<connectors>
 						<connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
@@ -43,6 +43,8 @@
 							<maxIdleTime>60000</maxIdleTime>
 						</connector>
 					</connectors>
+                    <stopKey>stop</stopKey>
+                    <stopPort>22222</stopPort>
 				</configuration>
 			</plugin>
             <!-- Configuration which allows JUnit tests to be placed in the same folder as java files 
@@ -144,5 +146,10 @@
 			<artifactId>activemq-all</artifactId>
 			<version>5.5.0</version>
 		</dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.1.2</version>
+        </dependency>
     </dependencies>
 </project>

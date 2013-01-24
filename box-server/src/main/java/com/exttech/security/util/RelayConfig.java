@@ -6,20 +6,17 @@ import java.util.Properties;
 
 public class RelayConfig {
 
-    public static final String URL_BOX;
-    public static final String URL_DOWNLOAD_BOX;
-    public static final String TMP_DIR;
-    public static final int POOL_CORE_SIZE;
+    public static final String URL_RELAY_SERVER;
+    public static final String FILE_PATH;
     public static final int FILE_SIZE;
-
-    public static final int TIMEOUT = 20 * 1000;
+    public static final int POOL_CORE_SIZE;
+    public static final int SLEEP_TIME;
 
 
     private static final String CONFIG_FILE_PATH = "/config.properties";
 
     static {
         InputStream in = RelayConfig.class.getResourceAsStream(CONFIG_FILE_PATH);
-
         Properties properties = new Properties();
         try {
             properties.load(in);
@@ -27,10 +24,14 @@ public class RelayConfig {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-        URL_BOX = properties.getProperty("box.url");
-        URL_DOWNLOAD_BOX = properties.getProperty("box.download.url");
-        TMP_DIR = properties.getProperty("tmp.dir");
+        URL_RELAY_SERVER = properties.getProperty("relay.server.url");
+        FILE_PATH = properties.getProperty("file.path");
+        FILE_SIZE = Integer.valueOf(properties.getProperty("file.size", "512"));
         POOL_CORE_SIZE = Integer.valueOf(properties.getProperty("pool.core.size"));
-        FILE_SIZE = Integer.valueOf(properties.getProperty("file.size"));
+        SLEEP_TIME = Integer.valueOf(properties.getProperty("sleep.time"));
+    }
+
+    public static void main(String[] args) {
+        System.out.println(RelayConfig.URL_RELAY_SERVER);
     }
 }
