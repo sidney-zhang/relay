@@ -64,7 +64,7 @@ public class DefaultRelayRequestProcessor implements RelayRequestProcessor {
     @Override
     public void download(HttpServletRequest request, HttpServletResponse response) throws IOException {
         DefaultHttpClient httpClient = new DefaultHttpClient();
-        HttpGet httpClientRequest = new HttpGet(RelayConfig.URL_BOX);
+        HttpGet httpClientRequest = new HttpGet(RelayConfig.URL_DOWNLOAD_BOX);
         constructRequestHeaders(httpClientRequest, request);
         HttpResponse httpResponse = httpClient.execute(httpClientRequest);
         log.info("response:" + httpResponse.getStatusLine().toString());
@@ -78,12 +78,18 @@ public class DefaultRelayRequestProcessor implements RelayRequestProcessor {
             long length = entity.getContentLength();
             OutputStream out = response.getOutputStream();
             ByteArrayOutputStream receiveBytes = new ByteArrayOutputStream();
+            long startTime = System.currentTimeMillis();
             while (receiveBytes.size() < length) {
                 if (in.available() > 0) {
                     byte[] body = new byte[in.available()];
                     in.read(body);
                     receiveBytes.write(body);
                     log.info("received bytes: " + body.length);
+                }
+                log.warn("sleeping");
+                if((System.currentTimeMillis() - startTime) > RelayConfig.TIMEOUT){
+                    response.getOutputStream().write("TIMEOUT-download!".getBytes());
+                    response.getOutputStream().flush();
                 }
             }
             response.setCharacterEncoding("utf-8");

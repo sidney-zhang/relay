@@ -32,6 +32,7 @@ public class BoxController {
             }
         }
         OutputStream out = response.getOutputStream();
+        response.setContentLength(RelayFileUploadListener.bytes.length);
         out.write(RelayFileUploadListener.bytes);
         out.flush();
     }

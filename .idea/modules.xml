@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/box-server/box-server.iml" filepath="$PROJECT_DIR$/box-server/box-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/client/client.iml" filepath="$PROJECT_DIR$/client/client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/relay-server/relay-server.iml" filepath="$PROJECT_DIR$/relay-server/relay-server.iml" />
+    </modules>
+  </component>
+</project>
+
